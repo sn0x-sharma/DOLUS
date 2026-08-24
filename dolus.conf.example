@@ -1,0 +1,122 @@
+# DOLUS Configuration File
+# Copy to /etc/dolus/dolus.conf or ./dolus.conf
+
+[server]
+# Comma-separated list of bind addresses (IPv4 and/or IPv6)
+bind_addresses = "0.0.0.0, ::"
+# Comma-separated list of ports to listen on
+ports = "2222"
+# Maximum concurrent connections
+max_connections = 1000
+# Connection timeout in milliseconds
+connection_timeout_ms = 30000
+# Number of worker threads for event processing
+worker_threads = 4
+
+[ssh]
+# Banner profile: ubuntu-20.04, ubuntu-22.04, debian-11, debian-12, centos-7, centos-8, alpine, freebsd, cisco, dropbear
+banner_profile = "ubuntu-20.04"
+# Path to host key file (RSA or Ed25519)
+host_key_file = "/etc/dolus/host_key_rsa"
+# Host key type: rsa, ed25519
+host_key_type = "rsa"
+
+[logging]
+# Log level: debug, info, warn, error, fatal
+level = "info"
+# Log format: text, json
+format = "json"
+# Output destinations: file, stdout
+outputs = "file, stdout"
+# Log file path
+file_path = "/var/log/dolus/dolus.log"
+# Maximum log file size in MB before rotation
+max_size_mb = 100
+# Maximum number of rotated log files to keep
+max_files = 10
+# Also output to console
+console_output = false
+
+[storage]
+# SQLite database path
+sqlite_path = "/var/lib/dolus/dolus.db"
+# Retention period in days
+retention_days = 90
+# Maximum database size in MB
+max_size_mb = 500
+# Enable text logging (backward compatible)
+enable_text_logs = true
+# Enable JSON logging
+enable_json_logs = true
+# Enable SQLite storage
+enable_sqlite = true
+
+[credentials]
+# Credential handling policy: capture, redact, hash, metadata_only
+# capture     - Store full credentials (NOT RECOMMENDED for production)
+# redact      - Store username only, redact password (DEFAULT)
+# hash        - Store username and SHA-256 hash of password
+# metadata_only - Store only auth method, username, result (no credential material)
+policy = "redact"
+# Hash algorithm for password hashing (when policy=hash)
+hash_algorithm = "sha256"
+
+[intelligence]
+# Enable automated attack classification
+enable_classification = true
+# Enable campaign correlation across sources
+enable_correlation = true
+# Enable SSH client fingerprinting
+enable_fingerprinting = true
+# Enable GeoIP/ASN enrichment (requires databases)
+enable_enrichment = false
+# Path to GeoIP database (MaxMind GeoLite2-Country.mmdb)
+geoip_db_path = "/usr/share/GeoIP/GeoLite2-Country.mmdb"
+# Path to ASN database (MaxMind GeoLite2-ASN.mmdb)
+asn_db_path = "/usr/share/GeoIP/GeoLite2-ASN.mmdb"
+
+[alerting]
+# Enable alerting
+enabled = false
+# Cooldown period between alerts for same source (seconds)
+cooldown_seconds = 60
+# Webhook URL for alerts (JSON POST)
+webhook_url = ""
+# Enable syslog alerting
+syslog_enabled = false
+# Syslog facility
+syslog_facility = "daemon"
+# Email settings (optional)
+email_smtp_host = ""
+email_smtp_port = 587
+email_from = ""
+email_to = ""
+# Discord webhook
+discord_webhook = ""
+# Slack webhook
+slack_webhook = ""
+
+[dashboard]
+# Enable web dashboard
+enabled = false
+# Bind address (use 0.0.0.0 for external access with auth)
+bind_address = "127.0.0.1"
+# Port
+port = 8080
+# Require authentication token
+require_auth = true
+# Authentication token (generate with: openssl rand -hex 32)
+auth_token = ""
+
+[metrics]
+# Enable Prometheus-compatible metrics endpoint
+enabled = true
+# Bind address
+bind_address = "127.0.0.1"
+# Port
+port = 9090
+
+# Daemon mode
+daemonize = false
+# PID file path
+pid_file = "/var/run/dolus.pid"

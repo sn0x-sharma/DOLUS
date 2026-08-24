@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  dolus:
+    build:
+      context: ..
+      dockerfile: src/deployment/Dockerfile
+    image: dolus:latest
+    container_name: dolus
+    restart: unless-stopped
+    ports:
+      - "2222:2222"
+      - "8080:8080"
+      - "9090:9090"
+    volumes:
+      - ./config:/etc/dolus:ro
+      - dolus-data:/var/lib/dolus
+      - dolus-logs:/var/log/dolus
+    environment:
+      - DOLUS_BIND_ADDRESSES=0.0.0.0, ::
+      - DOLUS_PORT=2222
+      - DOLUS_LOG_LEVEL=info
+      - DOLUS_LOG_FORMAT=json
+      - DOLUS_LOG_FILE=/var/log/dolus/dolus.log
+      - DOLUS_SQLITE_PATH=/var/lib/dolus/dolus.db
+      - DOLUS_RETENTION_DAYS=90
+      - DOLUS_CRED_POLICY=redact
+      - DOLUS_ENABLE_CLASSIFICATION=true
+      - DOLUS_ENABLE_CORRELATION=true
+      - DOLUS_ENABLE_FINGERPRINTING=true
+      - DOLUS_ALERTING_ENABLED=false
+    healthcheck:
+      test: ["CMD", "dolus", "--config", "/etc/dolus/dolus.conf", "status"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /run
+      - /tmp
+    cap_drop:
+      - ALL
+    # cap_add:
+    #   - NET_BIND_SERVICE  # Uncomment if binding to port < 1024
+
+  # Optional: Redis for distributed deployments
+  # redis:
+  #   image: redis:7-alpine
+  #   volumes:
+  #     - redis-data:/data
+  #   command: redis-server --appendonly yes
+
+  # Optional: Prometheus for metrics
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   volumes:
+  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  #     - prometheus-data:/prometheus
+  #   ports:
+  #     - "9091:9090"
+  #   command:
+  #     - '--config.file=/etc/prometheus/prometheus.yml'
+  #     - '--storage.tsdb.path=/prometheus'
+
+  # Optional: Grafana for dashboards
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   volumes:
+  #     - grafana-data:/var/lib/grafana
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - GF_SECURITY_ADMIN_USER=admin
+  #     - GF_SECURITY_ADMIN_PASSWORD=changeme
+
+volumes:
+  dolus-data:
+  dolus-logs:
+  # redis-data:
+  # prometheus-data:
+  # grafana-data:
+
+networks:
+  default:
+    name: dolus-network
