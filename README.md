@@ -1,4 +1,4 @@
-# DOLUS - Deception-Driven SSH Honeypot & Attack Intelligence
+<img width="1983" height="793" alt="ChatGPT Image Aug 24, 2026, 08_44_23 AM" src="https://github.com/user-attachments/assets/9c07b43b-3610-44f2-ac92-6d1938c6a00f" />
 
 ### Lightweight SSH honeypot designed to attract, record, and analyze unauthorized SSH authentication activity.
 ---
