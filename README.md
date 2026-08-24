@@ -1,18 +1,6 @@
-# DOLUS
+# DOLUS - Deception-Driven SSH Honeypot & Attack Intelligence
 
-### Deception-Driven SSH Honeypot & Attack Intelligence
-
-<p align="center">
-
-  <b>Observe. Deceive. Collect. Analyze.</b>
-
-  <br><br>
-
-  Lightweight SSH honeypot designed to attract, record,
-  and analyze unauthorized SSH authentication activity.
-
-</p>
-
+### Lightweight SSH honeypot designed to attract, record, and analyze unauthorized SSH authentication activity.
 ---
 
 ## Overview
